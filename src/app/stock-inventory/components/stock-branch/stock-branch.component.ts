@@ -6,7 +6,7 @@ import { FormGroup } from '@angular/forms';
   styleUrls: ['stock-branch.component.scss'],
   template: `
     <div [formGroup]="parent">
-      <div formGroupName="store">
+      <div class="store" formGroupName="store">
         <input placeholder="Branch ID" type="text" formControlName="branch">
         <div *ngIf="required('branch')" class="error">
           Branch ID is required

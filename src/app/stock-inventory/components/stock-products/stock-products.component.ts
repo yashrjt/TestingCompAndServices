@@ -23,7 +23,7 @@ import { Product } from '../../models/product.interface';
               [min]="10"
               [max]="1000">
             </stock-counter>
-            <button type="button" (click)="removeProduct(item, i)">
+            <button type="button" class="removeproduct" (click)="removeProduct(item, i)">
               Remove
             </button>
           </div>
@@ -44,6 +44,7 @@ export class StockProductsComponent implements OnChanges {
 
   @Output()
   remove = new EventEmitter<any>();
+
 
   ngOnChanges(){
     console.log("TCL: StockProductsComponent -> stock", this.stock)

@@ -1,4 +1,4 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, tick } from '@angular/core/testing';
 import { BrowserDynamicTestingModule, platformBrowserDynamicTesting } from '@angular/platform-browser-dynamic/testing';
 import { DebugElement } from '@angular/core';
 
@@ -12,7 +12,8 @@ import { StockSelectorComponent } from '../../components/stock-selector/stock-se
 import { StockInventoryService } from '../../services/stock-inventory.service';
 
 import {Observable,of}  from 'rxjs';
-
+import {By}  from '@angular/platform-browser';
+import {fakeAsync} from '@angular/core/testing';
 //import 'rxjs/add/observable/of';
 
 
@@ -56,12 +57,54 @@ describe('StockInventoryComponent', () => {
   });
 
   it('should get cart items and products on init', () => {
+   
     spyOn(service, 'getProducts').and.callThrough();
     spyOn(service, 'getCartItems').and.callThrough();
     component.ngOnInit();
     expect(service.getProducts).toHaveBeenCalled();
     expect(service.getCartItems).toHaveBeenCalled();
   });
+
+  it('should call the onsubmit on form submission',()=>{
+   
+    component.ngOnInit();
+    
+    
+    spyOn(component,'onSubmit');
+    let formsubmit=fixture.debugElement.queryAll(By.css('.myform'))[0];
+    formsubmit.triggerEventHandler('ngSubmit',null);
+    fixture.detectChanges();
+    expect(component.onSubmit).toHaveBeenCalled();
+
+   
+  })
+
+  it('should have the right number of elements',()=>{
+    component.ngOnInit();
+
+    let button=fixture.debugElement.queryAll(By.css('.submit'));
+    expect(button.length).toBe(1);
+
+    let store=fixture.debugElement.queryAll(By.css('.store'));
+    expect(store.length).toBe(1);
+    // let el=fixture.debugElement.queryAll(By.all());
+    //console.log("el", el)
+
+   
+  })
+
+  it('should have allchild elements',()=>{
+    component.ngOnInit();
+    let stockproductsChildDebugElement = fixture.debugElement.query(By.directive(StockProductsComponent));
+    expect(stockproductsChildDebugElement).toBeDefined();
+
+    let stockselectorChildDebugElement = fixture.debugElement.query(By.directive(StockSelectorComponent));
+    expect(stockselectorChildDebugElement).toBeDefined();
+
+    let stockbranchChildDebugElement = fixture.debugElement.query(By.directive(StockBranchComponent));
+    expect(stockbranchChildDebugElement).toBeDefined();
+
+  })
 
   it('should create a product map from the service response', () => {
     component.ngOnInit();

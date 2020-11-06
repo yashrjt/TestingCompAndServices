@@ -13,7 +13,7 @@ import { StockInventoryService } from '../../services/stock-inventory.service';
   styleUrls: ['stock-inventory.component.scss'], 
   template: `
     <div class="stock-inventory">
-      <form [formGroup]="form" (ngSubmit)="onSubmit()">
+      <form [formGroup]="form" (ngSubmit)="onSubmit()" class="myform">
         
         <stock-branch
           [parent]="form">
@@ -32,7 +32,7 @@ import { StockInventoryService } from '../../services/stock-inventory.service';
         </stock-products>
 
         <div class="stock-inventory__buttons">
-          <button 
+          <button class="submit"
             type="submit" 
             [disabled]="form.invalid">
             Order stock
@@ -69,14 +69,12 @@ export class StockInventoryComponent implements OnInit {
 
     const cart = this.stockService.getCartItems();
     const products = this.stockService.getProducts();
-    console.log("TCL: StockInventoryComponent -> ngOnInit -> products", products)
-
+    
       forkJoin(cart, products)
       .subscribe(([cart, products]: [Item[], Product[]]) => {
 
         const mapInfo = products.map<[number, Product]>(product => [product.id, product]);
         this.products = products;
-        console.log("TCL: StockInventoryComponent -> ngOnInit ->   this.products",   this.products)
         this.productsMap = new Map<number, Product>(mapInfo);
         cart.forEach(item => this.addStock(item));
 
@@ -104,4 +102,5 @@ export class StockInventoryComponent implements OnInit {
   onSubmit() {
     console.log('Submit:', this.form.value);
   }
+
 }
